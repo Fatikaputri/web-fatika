@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PORTFOLIO Fatika</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 10px solid #333;
+            border-radius: 50%;
+            margin: 20px auto;
+            background: white;
+        }
+        .hand {
+            position: absolute;
+            background: #333;
+            transform-origin: bottom;
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) scaleX(-1);
+        }
+        .hour { height: 50px; width: 6px; background: #333; z-index: 3; }
+        .minute { height: 70px; width: 4px; background: #666; z-index: 2; }
+        .second { height: 90px; width: 2px; background: red; z-index: 1; }
+        .digital-clock {
+            font-size: 2rem;
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .card {
+            background-color: #f8f9fa;
+            border: 1px solid #007bff;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: scale(1.05); }
+        .card-title { color: #007bff; }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .lamp-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .lamp {
+            width: 60px;
+            height: 100px;
+            background-color: grey;
+            border: 2px solid black;
+            margin: 10px auto;
+            border-radius: 20px;
+        }
+        .lamp.on {
+            background-color: yellow;
+        }
+        .lamp-title { font-weight: bold; margin-top: 10px; }
+        .btn-container { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color:#659287;">
+        <div class="container">
+            <a class="navbar-brand" href="#">FATIKA PUTRI</a>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section class="jumbotron text-center" style="background-color: #E195AB;">
+        <img src="img/fatika foto.jpg" class="rounded-circle" style="width: 300px; height: 300px;">
+        <h1 class="display-4">FATIKA</h1>
+        <p class="lead">Perkenalkan Nama Saya FATIKA PUTRI QAIDENDRA, Mahasiswa stikom muhammadiyah batam<hr> Semester 1 Prodi Teknik Informatika</p>
+        <p class="lead">NIM : 24010013</p>
+        
+        <!-- Jam Digital -->
+        <div class="digital-clock" id="digitalClock">Waktu Sekarang: --:--:--</div>
+        
+        <!-- Jam Lingkaran -->
+        <div class="clock" id="analogClock">
+            <div class="hand hour" id="hourHand"></div>
+            <div class="hand minute" id="minuteHand"></div>
+            <div class="hand second" id="secondHand"></div>
+        </div>
+    </section>
+
+    <!-- PROGRAM SECTION -->
+    <div class="container">
+        <h1>PROGRAM</h1>
+        <div class="row">
+            <!-- Hello World Card -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Hello World</h5>
+                        <button type="button" class="btn btn-primary" id="showHelloWorldBtn">Tampilkan Hello World</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Luas Persegi Panjang Card -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Luas Persegi Panjang</h5>
+                        <input id="panjang" class="form-control mb-2" placeholder="Panjang" type="number">
+                        <input id="lebar" class="form-control mb-2" placeholder="Lebar" type="number">
+                        <button class="btn btn-success" onclick="hitungLuas()">Hitung</button>
+                        <div id="luasResult" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temperature Converter Card -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Temperature Converter</h5>
+                        <input type="number" class="form-control mb-2" id="tempInput" placeholder="Temperature">
+                        <select class="form-control mb-2" id="conversionType">
+                            <option value="CtoF">Celsius to Fahrenheit</option>
+                            <option value="FtoC">Fahrenheit to Celsius</option>
+                        </select>
+                        <button type="button" class="btn btn-primary" id="convertBtn" data-toggle="modal" data-target="#resultModal">Convert</button>
+                        <div id="conversionResult" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lamp Control -->
+        <h2 class="text-center mt-4">5 Lampu - Rangkaian Paralel dan Seri</h2>
+        <div class="lamp-container">
+            <div class="lamp" id="lamp1"></div>
+            <div class="lamp" id="lamp2"></div>
+            <div class="lamp" id="lamp3"></div>
+            <div class="lamp" id="lamp4"></div>
+            <div class="lamp" id="lamp5"></div>
+        </div>
+        <div class="text-center btn-container">
+            <button class="btn btn-success" onclick="turnOnAll()">Hidupkan Semua</button>
+            <button class="btn btn-danger" onclick="turnOffAll()">Matikan Semua</button>
+            <button class="btn btn-warning" onclick="toggleLamp(1)">Lampu 1</button>
+            <button class="btn btn-warning" onclick="toggleLamp(2)">Lampu 2</button>
+            <button class="btn btn-warning" onclick="toggleLamp(3)">Lampu 3</button>
+            <button class="btn btn-warning" onclick="toggleLamp(4)">Lampu 4</button>
+            <button class="btn btn-warning" onclick="toggleLamp(5)">Lampu 5</button>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal fade" id="helloWorldModal" tabindex="-1" role="dialog" aria-labelledby="helloWorldModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helloWorldModalLabel">Hello World</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Hello World!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to show Hello World Modal
+        document.getElementById("showHelloWorldBtn").addEventListener("click", function() {
+            $('#helloWorldModal').modal('show');
+        });
+
+        // Luas Persegi Panjang
+        function hitungLuas() {
+            const panjang = document.getElementById('panjang').value;
+            const lebar = document.getElementById('lebar').value;
+            if (panjang && lebar) {
+                const luas = panjang * lebar;
+                document.getElementById('luasResult').innerText = `Luas: ${luas} cm²`;
+            } else {
+                document.getElementById('luasResult').innerText = "Masukkan panjang dan lebar!";
+            }
+        }
+
+        // Temperature Converter
+        document.getElementById("convertBtn").addEventListener("click", function() {
+            const tempInput = parseFloat(document.getElementById("tempInput").value);
+            const conversionType = document.getElementById("conversionType").value;
+            let result;
+
+            if (isNaN(tempInput)) {
+                result = "Masukkan suhu yang valid!";
+            } else {
+                if (conversionType === "CtoF") {
+                    result = (tempInput * 9/5) + 32;
+                    result = `${tempInput}°C = ${result.toFixed(2)}°F`;
+                } else if (conversionType === "FtoC") {
+                    result = (tempInput - 32) * 5/9;
+                    result = `${tempInput}°F = ${result.toFixed(2)}°C`;
+                }
+            }
+            document.getElementById("conversionResult").innerText = result;
+        });
+
+        // Lampu Control
+        function turnOnAll() {
+            document.querySelectorAll('.lamp').forEach(el => el.classList.add('on'));
+        }
+
+        function turnOffAll() {
+            document.querySelectorAll('.lamp').forEach(el => el.classList.remove('on'));
+        }
+
+        function toggleLamp(num) {
+            const lamp = document.getElementById(`lamp${num}`);
+            lamp.classList.toggle('on');
+        }
+
+        // Jam Digital
+        function updateClock() {
+            const options = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const now = new Date().toLocaleTimeString('id-ID', options);
+            document.getElementById('digitalClock').innerText = `Waktu Sekarang: ${now}`;
+        }
+
+        // Jam Analog
+        function updateAnalogClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const hourDeg = (hours % 12) * 30 + (minutes / 60) * 30;  // 360/12 = 30 degrees per hour
+            const minuteDeg = minutes * 6;  // 360/60 = 6 degrees per minute
+            const secondDeg = seconds * 6;  // 360/60 = 6 degrees per second
+
+            document.getElementById('hourHand').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            document.getElementById('minuteHand').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+            document.getElementById('secondHand').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+        }
+
+        // Update clocks every second
+        setInterval(function() {
+            updateClock();
+            updateAnalogClock();
+        }, 1000);
+
+        // Initial update
+        updateClock();
+        updateAnalogClock();
+    </script>
+</body>
+</html>
